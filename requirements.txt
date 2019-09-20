@@ -1,6 +1,7 @@
 Cython
 mmcv
 numpy
+matplotlib
 tqdm
 torch
 torchvision
