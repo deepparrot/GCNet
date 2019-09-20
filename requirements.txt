@@ -1,4 +1,5 @@
 Cython
+mmcv
 numpy
 tqdm
 torch
