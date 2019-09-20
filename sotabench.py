@@ -1,6 +1,3 @@
-import os
-os.system('./compile.sh')
-
 import argparse
 import json
 import os.path as osp
