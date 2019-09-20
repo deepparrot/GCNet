@@ -2,6 +2,8 @@
 source /workspace/venv/bin/activate
 PYTHON=${PYTHON:-"python"}
 
+pip install torch
+
 echo "Building roi align op..."
 cd mmdet/ops/roi_align
 if [ -d "build" ]; then
