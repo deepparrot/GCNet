@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+source /workspace/venv/bin/activate
 PYTHON=${PYTHON:-"python"}
 
 echo "Building roi align op..."
