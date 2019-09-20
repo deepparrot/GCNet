@@ -106,6 +106,12 @@ def collect_results(result_part, size, tmpdir=None):
         return ordered_results
 
 def main():
+    
+    evaluator = COCOEvaluator(
+    root='./data/vision/coco',
+    paper_model_name='Mask R-CNN (ResNet-50-FPN)',
+    paper_arxiv_id='1703.06870')
+
     out = 'results.pkl'
     launcher = 'none'
 
@@ -197,11 +203,6 @@ def main():
                         result_file = out + '.{}'.format(name)
                         result_files = results2json(dataset, outputs_,
                                                     result_file)
-
-    evaluator = COCOEvaluator(
-        root='./data/vision/coco',
-        paper_model_name='Mask R-CNN (ResNet-50-FPN)',
-        paper_arxiv_id='1703.06870')
 
     anns = json.load(open(result_files['bbox']))
     evaluator.add(anns)
