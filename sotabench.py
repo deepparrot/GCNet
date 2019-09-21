@@ -18,6 +18,10 @@ from mmdet.core import results2json, coco_eval, wrap_fp16_model
 from mmdet.datasets import build_dataloader, get_dataset
 from mmdet.models import build_detector
 
+# Extract val2017 zip
+from torchbench.utils import extract_archive
+image_dir_zip = osp.join('./.data/vision/coco', 'val2017.zip')
+extract_archive(from_path=image_dir_zip, to_path='./.data/vision/coco')
 
 def single_gpu_test(model, data_loader, show=False):
     model.eval()
