@@ -121,7 +121,7 @@ def main():
 
     cfg = mmcv.Config.fromfile('./configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py')
     cfg.data.test['ann_file'] = './.data/vision/coco/annotations/instances_val2017.json'
-    cfg.data.test['img_prefix'] = '/.data/vision/coco/val2017/'
+    cfg.data.test['img_prefix'] = './.data/vision/coco/val2017/'
 
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
