@@ -23,10 +23,6 @@ from torchbench.utils import extract_archive
 image_dir_zip = osp.join('./.data/vision/coco', 'val2017.zip')
 extract_archive(from_path=image_dir_zip, to_path='./.data/vision/coco')
 
-print('Sleeping for a long time.... - to debug')
-import time
-time.sleep(60*10)
-
 def single_gpu_test(model, data_loader, show=False):
     model.eval()
     results = []
@@ -113,7 +109,7 @@ def collect_results(result_part, size, tmpdir=None):
 def main():
     
     evaluator = COCOEvaluator(
-    root='./data/vision/coco',
+    root='./.data/vision/coco',
     paper_model_name='Mask R-CNN (ResNet-50-FPN)',
     paper_arxiv_id='1703.06870')
 
