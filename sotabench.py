@@ -161,12 +161,12 @@ def main():
     if fp16_cfg is not None:
         wrap_fp16_model(model)
 
-    urllib.request.urlretrieve(
+    local_checkpoint, _ = urllib.request.urlretrieve(
         'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
         'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth')
 
-    checkpoint = load_checkpoint(model, '/home/ubuntu/GCNet/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
-                                 map_location='cpu')
+    # '/home/ubuntu/GCNet/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth'
+    checkpoint = load_checkpoint(model, local_checkpoint, map_location='cpu')
     # old versions did not save class info in checkpoints, this walkaround is
     # for backward compatibility
     if 'CLASSES' in checkpoint['meta']:
