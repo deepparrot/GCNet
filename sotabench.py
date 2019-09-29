@@ -110,7 +110,7 @@ def main():
     
     evaluator = COCOEvaluator(
     root='./.data/vision/coco',
-    paper_model_name='Mask R-CNN (ResNet-50-FPN)',
+    model_name='Mask R-CNN (ResNet-50-FPN)',
     paper_arxiv_id='1703.06870')
 
     out = 'results.pkl'
