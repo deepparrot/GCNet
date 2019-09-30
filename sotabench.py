@@ -147,8 +147,9 @@ def single_gpu_test(model, data_loader, show=False, evaluator=None):
             anns = json.load(open(temp_result_files['bbox']))
             evaluator.add(anns)
             from sotabencheval.object_detection.utils import get_coco_metrics
-            print(evaluator.cache_values(annotations=anns, metrics=get_coco_metrics(evaluator.coco_evaluator)))
+
             print(evaluator.batch_hash)
+            
             if evaluator.cache_exists:
                 return results, True
         
@@ -332,11 +333,9 @@ def main(model_name, paper_arxiv_id):
                             result_files = results2json(dataset, outputs_,
                                                         result_file)
 
-        evaluator = COCOEvaluator(
-            root='./.data/vision/coco',
-            model_name=model_name,
-            paper_arxiv_id=paper_arxiv_id)
+
         anns = json.load(open(result_files['bbox']))
+        evaluator.detections = []
         evaluator.add(anns)
         evaluator.save()
 
