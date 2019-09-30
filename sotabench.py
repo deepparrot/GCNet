@@ -226,7 +226,7 @@ def collect_results(result_part, size, tmpdir=None):
         shutil.rmtree(tmpdir)
         return ordered_results
 
-def main(model_name, paper_arxiv_id):
+def evaluate_model(model_name, paper_arxiv_id, weights_url, weights_name, config):
     
     evaluator = COCOEvaluator(
     root='./.data/vision/coco',
