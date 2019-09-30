@@ -108,7 +108,7 @@ def segm2json(dataset, results):
     return bbox_json_results, segm_json_results
 
 
-def results2json(dataset, results, out_file):
+def cached_results2json(dataset, results, out_file):
     result_files = dict()
     if isinstance(results[0], list):
         json_results = det2json(dataset, results)
@@ -142,7 +142,7 @@ def single_gpu_test(model, data_loader, show=False, evaluator=None):
         results.append(result)
 
         if i == 0:
-            temp_result_files = results2json(dataset, results, 'temp_results.pkl')
+            temp_result_files = cached_results2json(dataset, results, 'temp_results.pkl')
             anns = json.load(open(temp_result_files['bbox']))
             evaluator.add(anns)
             
@@ -307,7 +307,8 @@ def main(model_name, paper_arxiv_id):
         evaluator.save()
     
     else:
-        
+        from mmdet.core import results2json
+
         rank, _ = get_dist_info()
         if out and rank == 0:
             print('\nwriting results to {}'.format(out))
