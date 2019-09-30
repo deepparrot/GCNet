@@ -365,9 +365,12 @@ model_configs.append(
      'paper_arxiv_id': '1904.11492',
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
      'weights_name': 'cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
-     'config': './configs/gcnet/x101/mask_rcnn_r4_gcb_c3-c5_x101_32x4d_fpn_syncbn_1x.py'}
+     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py'}
 )
-        
+            
+import torch.distributed as dist
+dist.init_process_group('gloo', init_method='file:///tmp/somefile', rank=0, world_size=1)
+    
 for model_config in model_configs:
     evaluate_model(model_name=model_config['model_name'], 
                    paper_arxiv_id=model_config['model_name'],
