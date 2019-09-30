@@ -340,25 +340,25 @@ def evaluate_model(model_name, paper_arxiv_id, weights_url, weights_name, config
 
 model_configs = []
 model_configs.append(
-    {model_name: 'Mask R-CNN (ResNet-50-FPN, 1x LR)', 
-     paper_arxiv_id: '1904.11492',
-     weights_url: 'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
-     weights_name: 'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
-     config: './configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py'}
+    {'model_name': 'Mask R-CNN (ResNet-50-FPN, 1x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
+     'weights_name': 'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
+     'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py'}
 )
 model_configs.append(
-    {model_name: 'Mask R-CNN (ResNet-50-FPN, 2x LR)', 
-     paper_arxiv_id: '1904.11492',
-     weights_url: 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r50_fpn_2x-4615e866.pth',
-     weights_name: 'mask_rcnn_r50_fpn_2x-4615e866.pth',
-     config: './configs/gcnet/r50/mask_rcnn_r50_fpn_2x.py'}
+    {'model_name': 'Mask R-CNN (ResNet-50-FPN, 2x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r50_fpn_2x-4615e866.pth',
+     'weights_name': 'mask_rcnn_r50_fpn_2x-4615e866.pth',
+     'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_2x.py'}
 )
 model_configs.append(
-    {model_name: 'Mask R-CNN (ResNet-101-FPN, 1x LR)', 
-     paper_arxiv_id: '1904.11492',
-     weights_url: 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r101_fpn_1x.pth',
-     weights_name: 'mask_rcnn_r101_fpn_1x.pth',
-     config: './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py'}
+    {'model_name': 'Mask R-CNN (ResNet-101-FPN, 1x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r101_fpn_1x.pth',
+     'weights_name': 'mask_rcnn_r101_fpn_1x.pth',
+     'config': './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py'}
 )
         
 for model_config in model_configs:
