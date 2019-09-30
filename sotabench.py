@@ -239,7 +239,7 @@ def main(model_name, paper_arxiv_id):
     if out is not None and not out.endswith(('.pkl', '.pickle')):
         raise ValueError('The output file must be a pkl file.')
 
-    cfg = mmcv.Config.fromfile('./configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py')
+    cfg = mmcv.Config.fromfile(config)
     cfg.data.test['ann_file'] = './.data/vision/coco/annotations/instances_val2017.json'
     cfg.data.test['img_prefix'] = './.data/vision/coco/val2017/'
 
@@ -286,8 +286,8 @@ def main(model_name, paper_arxiv_id):
         wrap_fp16_model(model)
 
     local_checkpoint, _ = urllib.request.urlretrieve(
-        'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
-        'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth')
+        weights_url,
+        weights_name)
 
     # '/home/ubuntu/GCNet/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth'
     checkpoint = load_checkpoint(model, local_checkpoint, map_location='cpu')
@@ -338,4 +338,32 @@ def main(model_name, paper_arxiv_id):
         evaluator.add(anns)
         evaluator.save()
 
-main(model_name='Mask R-CNN (ResNet-50-FPN)', paper_arxiv_id='1703.06870')
+model_configs = []
+model_configs.append(
+    {model_name: 'Mask R-CNN (ResNet-50-FPN, 1x LR)', 
+     paper_arxiv_id: '1904.11492',
+     weights_url: 'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
+     weights_name: 'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
+     config: './configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py'}
+)
+model_configs.append(
+    {model_name: 'Mask R-CNN (ResNet-50-FPN, 2x LR)', 
+     paper_arxiv_id: '1904.11492',
+     weights_url: 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r50_fpn_2x-4615e866.pth',
+     weights_name: 'mask_rcnn_r50_fpn_2x-4615e866.pth',
+     config: './configs/gcnet/r50/mask_rcnn_r50_fpn_2x.py'}
+)
+model_configs.append(
+    {model_name: 'Mask R-CNN (ResNet-101-FPN, 1x LR)', 
+     paper_arxiv_id: '1904.11492',
+     weights_url: 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r101_fpn_1x.pth',
+     weights_name: 'mask_rcnn_r101_fpn_1x.pth',
+     config: './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py'}
+)
+        
+for model_config in model_configs:
+    evaluate_model(model_name=model_config['model_name'], 
+                   paper_arxiv_id=model_config['model_name'],
+                   weights_url=model_config['weights_url'],
+                   weights_name=model_config['weights_name'],
+                   config=model_config['config'])
