@@ -360,6 +360,13 @@ model_configs.append(
      'weights_name': 'mask_rcnn_r101_fpn_1x.pth',
      'config': './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py'}
 )
+model_configs.append(
+    {'model_name': 'GCNet (ResNeXt-101 + DCN + cascade + GC r16)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
+     'weights_name': 'cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
+     'config': './configs/gcnet/x101/mask_rcnn_r4_gcb_c3-c5_x101_32x4d_fpn_syncbn_1x.py'}
+)
         
 for model_config in model_configs:
     evaluate_model(model_name=model_config['model_name'], 
