@@ -346,7 +346,7 @@ model_configs.append(
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
      'weights_name': 'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
      'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py',
-     'paper_results': {'box AP': 0.372, 'AP50': 0.590, 'AP75': 0.401}
+     'paper_results': {'box AP': 0.372, 'AP50': 0.590, 'AP75': 0.401}}
 )
 model_configs.append(
     {'model_name': 'Mask R-CNN (ResNet-50-FPN, 2x LR)', 
