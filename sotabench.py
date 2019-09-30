@@ -14,7 +14,7 @@ from mmcv.runner import load_checkpoint, get_dist_info
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
 
 from mmdet.apis import init_dist
-from mmdet.core import results2json, coco_eval, wrap_fp16_model
+from mmdet.core import coco_eval, wrap_fp16_model
 from mmdet.datasets import build_dataloader, get_dataset
 from mmdet.models import build_detector
 
@@ -22,6 +22,113 @@ from mmdet.models import build_detector
 from torchbench.utils import extract_archive
 image_dir_zip = osp.join('./.data/vision/coco', 'val2017.zip')
 extract_archive(from_path=image_dir_zip, to_path='./.data/vision/coco')
+
+
+def xyxy2xywh(bbox):
+    _bbox = bbox.tolist()
+    return [
+        _bbox[0],
+        _bbox[1],
+        _bbox[2] - _bbox[0] + 1,
+        _bbox[3] - _bbox[1] + 1,
+    ]
+
+
+def proposal2json(dataset, results):
+    json_results = []
+    for idx in range(len(dataset)):
+        img_id = dataset.img_ids[idx]
+        bboxes = results[idx]
+        for i in range(bboxes.shape[0]):
+            data = dict()
+            data['image_id'] = img_id
+            data['bbox'] = xyxy2xywh(bboxes[i])
+            data['score'] = float(bboxes[i][4])
+            data['category_id'] = 1
+            json_results.append(data)
+    return json_results
+
+
+def det2json(dataset, results):
+    json_results = []
+    for idx in range(len(dataset)):
+        img_id = dataset.img_ids[idx]
+        try:
+            result = results[idx]
+        except IndexError:
+            break
+        for label in range(len(result)):
+            bboxes = result[label]
+            for i in range(bboxes.shape[0]):
+                data = dict()
+                data['image_id'] = img_id
+                data['bbox'] = xyxy2xywh(bboxes[i])
+                data['score'] = float(bboxes[i][4])
+                data['category_id'] = dataset.cat_ids[label]
+                json_results.append(data)
+    return json_results
+
+
+def segm2json(dataset, results):
+    bbox_json_results = []
+    segm_json_results = []
+    for idx in range(len(dataset)):
+        img_id = dataset.img_ids[idx]
+        try:
+            det, seg = results[idx]
+        except IndexError:
+            break
+        for label in range(len(det)):
+            # bbox results
+            bboxes = det[label]
+            for i in range(bboxes.shape[0]):
+                data = dict()
+                data['image_id'] = img_id
+                data['bbox'] = xyxy2xywh(bboxes[i])
+                data['score'] = float(bboxes[i][4])
+                data['category_id'] = dataset.cat_ids[label]
+                bbox_json_results.append(data)
+
+            # segm results
+            # some detectors use different score for det and segm
+            if len(seg) == 2:
+                segms = seg[0][label]
+                mask_score = seg[1][label]
+            else:
+                segms = seg[label]
+                mask_score = [bbox[4] for bbox in bboxes]
+            for i in range(bboxes.shape[0]):
+                data = dict()
+                data['image_id'] = img_id
+                data['score'] = float(mask_score[i])
+                data['category_id'] = dataset.cat_ids[label]
+                segms[i]['counts'] = segms[i]['counts'].decode()
+                data['segmentation'] = segms[i]
+                segm_json_results.append(data)
+    return bbox_json_results, segm_json_results
+
+
+def results2json(dataset, results, out_file):
+    result_files = dict()
+    if isinstance(results[0], list):
+        json_results = det2json(dataset, results)
+        result_files['bbox'] = '{}.{}.json'.format(out_file, 'bbox')
+        result_files['proposal'] = '{}.{}.json'.format(out_file, 'bbox')
+        mmcv.dump(json_results, result_files['bbox'])
+    elif isinstance(results[0], tuple):
+        json_results = segm2json(dataset, results)
+        result_files['bbox'] = '{}.{}.json'.format(out_file, 'bbox')
+        result_files['proposal'] = '{}.{}.json'.format(out_file, 'bbox')
+        result_files['segm'] = '{}.{}.json'.format(out_file, 'segm')
+        mmcv.dump(json_results[0], result_files['bbox'])
+        mmcv.dump(json_results[1], result_files['segm'])
+    elif isinstance(results[0], np.ndarray):
+        json_results = proposal2json(dataset, results)
+        result_files['proposal'] = '{}.{}.json'.format(out_file, 'proposal')
+        mmcv.dump(json_results, result_files['proposal'])
+    else:
+        raise TypeError('invalid type of results')
+    return result_files
 
 def single_gpu_test(model, data_loader, show=False, evaluator=None):
     model.eval()
