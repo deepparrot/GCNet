@@ -27,19 +27,29 @@ def single_gpu_test(model, data_loader, show=False):
     model.eval()
     results = []
     dataset = data_loader.dataset
-    prog_bar = mmcv.ProgressBar(len(dataset))
+    prog_bar = mmcv.ProgressBar(len(dataset))                    
+        
     for i, data in enumerate(data_loader):
         with torch.no_grad():
             result = model(return_loss=False, rescale=not show, **data)
         results.append(result)
 
+        if i == 0:
+            temp_result_files = results2json(dataset, results, 'temp_results.pkl')
+            anns = json.load(open(temp_result_files['bbox']))
+            evaluator.add(anns)
+            
+            if evaluator.cache_exists:
+                return results, True
+        
         if show:
             model.module.show_result(data, result, dataset.img_norm_cfg)
 
         batch_size = data['img'][0].size(0)
         for _ in range(batch_size):
             prog_bar.update()
-    return results
+            
+    return results, False
 
 
 def multi_gpu_test(model, data_loader, tmpdir=None):
@@ -106,12 +116,12 @@ def collect_results(result_part, size, tmpdir=None):
         shutil.rmtree(tmpdir)
         return ordered_results
 
-def main():
+def main(model_name, paper_arxiv_id):
     
     evaluator = COCOEvaluator(
     root='./.data/vision/coco',
-    model_name='Mask R-CNN (ResNet-50-FPN)',
-    paper_arxiv_id='1703.06870')
+    model_name=model_name,
+    paper_arxiv_id=paper_arxiv_id)
 
     out = 'results.pkl'
     launcher = 'none'
@@ -180,33 +190,43 @@ def main():
 
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])
-        outputs = single_gpu_test(model, data_loader, False)
+        outputs, cache_exists = single_gpu_test(model, data_loader, False, evaluator)
     else:
         model = MMDistributedDataParallel(model.cuda())
         outputs = multi_gpu_test(model, data_loader, '')
 
-    rank, _ = get_dist_info()
-    if out and rank == 0:
-        print('\nwriting results to {}'.format(out))
-        mmcv.dump(outputs, out)
-        eval_types = ['bbox']
-        if eval_types:
-            print('Starting evaluate {}'.format(' and '.join(eval_types)))
-            if eval_types == ['proposal_fast']:
-                result_file = out
-            else:
-                if not isinstance(outputs[0], dict):
-                    result_files = results2json(dataset, outputs, out)
+    if cache_exists:
+        print('Cache exists: %s' % (evaluator.batch_hash))
+        evaluator.save()
+    
+    else:
+        
+        rank, _ = get_dist_info()
+        if out and rank == 0:
+            print('\nwriting results to {}'.format(out))
+            mmcv.dump(outputs, out)
+            eval_types = ['bbox']
+            if eval_types:
+                print('Starting evaluate {}'.format(' and '.join(eval_types)))
+                if eval_types == ['proposal_fast']:
+                    result_file = out
                 else:
-                    for name in outputs[0]:
-                        print('\nEvaluating {}'.format(name))
-                        outputs_ = [out[name] for out in outputs]
-                        result_file = out + '.{}'.format(name)
-                        result_files = results2json(dataset, outputs_,
-                                                    result_file)
+                    if not isinstance(outputs[0], dict):
+                        result_files = results2json(dataset, outputs, out)
+                    else:
+                        for name in outputs[0]:
+                            print('\nEvaluating {}'.format(name))
+                            outputs_ = [out[name] for out in outputs]
+                            result_file = out + '.{}'.format(name)
+                            result_files = results2json(dataset, outputs_,
+                                                        result_file)
 
-    anns = json.load(open(result_files['bbox']))
-    evaluator.add(anns)
-    evaluator.save()
+        evaluator = COCOEvaluator(
+            root='./.data/vision/coco',
+            model_name=model_name,
+            paper_arxiv_id=paper_arxiv_id)
+        anns = json.load(open(result_files['bbox']))
+        evaluator.add(anns)
+        evaluator.save()
 
-main()
+main(model_name='Mask R-CNN (ResNet-50-FPN)', paper_arxiv_id='1703.06870')
