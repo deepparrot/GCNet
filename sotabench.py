@@ -23,7 +23,7 @@ from torchbench.utils import extract_archive
 image_dir_zip = osp.join('./.data/vision/coco', 'val2017.zip')
 extract_archive(from_path=image_dir_zip, to_path='./.data/vision/coco')
 
-def single_gpu_test(model, data_loader, show=False):
+def single_gpu_test(model, data_loader, show=False, evaluator=None):
     model.eval()
     results = []
     dataset = data_loader.dataset
