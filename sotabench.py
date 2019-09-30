@@ -226,12 +226,13 @@ def collect_results(result_part, size, tmpdir=None):
         shutil.rmtree(tmpdir)
         return ordered_results
 
-def evaluate_model(model_name, paper_arxiv_id, weights_url, weights_name, config):
+def evaluate_model(model_name, paper_arxiv_id, weights_url, weights_name, paper_results, config):
     
     evaluator = COCOEvaluator(
     root='./.data/vision/coco',
     model_name=model_name,
-    paper_arxiv_id=paper_arxiv_id)
+    paper_arxiv_id=paper_arxiv_id,
+    paper_results=paper_results)
 
     out = 'results.pkl'
     launcher = 'none'
@@ -344,28 +345,32 @@ model_configs.append(
      'paper_arxiv_id': '1904.11492',
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.1/mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
      'weights_name': 'mask_rcnn_r50_fpn_1x_20181010-069fa190.pth',
-     'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py'}
+     'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_1x.py',
+     'paper_results': {'box AP': 0.372, 'AP50': 0.590, 'AP75': 0.401}
 )
 model_configs.append(
     {'model_name': 'Mask R-CNN (ResNet-50-FPN, 2x LR)', 
      'paper_arxiv_id': '1904.11492',
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r50_fpn_2x-4615e866.pth',
      'weights_name': 'mask_rcnn_r50_fpn_2x-4615e866.pth',
-     'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_2x.py'}
+     'config': './configs/gcnet/r50/mask_rcnn_r50_fpn_2x.py',
+     'paper_results': None}
 )
 model_configs.append(
     {'model_name': 'Mask R-CNN (ResNet-101-FPN, 1x LR)', 
      'paper_arxiv_id': '1904.11492',
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r101_fpn_1x.pth',
      'weights_name': 'mask_rcnn_r101_fpn_1x.pth',
-     'config': './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py'}
+     'config': './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py',
+     'paper_results': None}
 )
 model_configs.append(
     {'model_name': 'GCNet (ResNeXt-101 + DCN + cascade + GC r16)', 
      'paper_arxiv_id': '1904.11492',
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
      'weights_name': 'cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
-     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py'}
+     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py',
+     'paper_results': None}
 )
             
 import torch.distributed as dist
@@ -376,4 +381,5 @@ for model_config in model_configs:
                    paper_arxiv_id=model_config['model_name'],
                    weights_url=model_config['weights_url'],
                    weights_name=model_config['weights_name'],
+                   paper_results=model_config['paper_results'],
                    config=model_config['config'])
