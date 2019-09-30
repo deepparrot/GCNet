@@ -2,12 +2,13 @@
 source /workspace/venv/bin/activate
 PYTHON=${PYTHON:-"python"}
 
+pip install torch
+
 apt-get git
 git clone https://github.com/NVIDIA/apex
 cd apex
 pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
 
-pip install torch
 
 echo "Building roi align op..."
 cd mmdet/ops/roi_align
