@@ -146,6 +146,8 @@ def single_gpu_test(model, data_loader, show=False, evaluator=None):
             temp_result_files = cached_results2json(copy.deepcopy(dataset), copy.deepcopy(results), 'temp_results.pkl')
             anns = json.load(open(temp_result_files['bbox']))
             evaluator.add(anns)
+            from sotabencheval.object_detection.utils import get_coco_metrics
+            print(evaluator.cache_values(annotations=anns, metrics=get_coco_metrics(evaluator.coco_evaluator)))
             print(evaluator.batch_hash)
             if evaluator.cache_exists:
                 return results, True
