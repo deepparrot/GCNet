@@ -146,7 +146,7 @@ def single_gpu_test(model, data_loader, show=False, evaluator=None):
             temp_result_files = cached_results2json(copy.deepcopy(dataset), copy.deepcopy(results), 'temp_results.pkl')
             anns = json.load(open(temp_result_files['bbox']))
             evaluator.add(anns)
-            
+            print(evaluator.batch_hash)
             if evaluator.cache_exists:
                 return results, True
         
