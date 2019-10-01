@@ -378,7 +378,7 @@ dist.init_process_group('gloo', init_method='file:///tmp/somefile', rank=0, worl
     
 for model_config in model_configs:
     evaluate_model(model_name=model_config['model_name'], 
-                   paper_arxiv_id=model_config['model_name'],
+                   paper_arxiv_id=model_config['paper_arxiv_id'],
                    weights_url=model_config['weights_url'],
                    weights_name=model_config['weights_name'],
                    paper_results=model_config['paper_results'],
