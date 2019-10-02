@@ -471,14 +471,32 @@ model_configs.append(
      'paper_results': {'box AP': 0.465, 'AP50': 0.654, 'AP75': 0.507}}
 )
 
-# REST
+# Cascade + DCN
+
+model_configs.append(
+    {'model_name': 'Mask R-CNN (ResNeXt-101 + DCN + cascade)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.6/cascade_mask_rcnn_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-9aa8c394.pth',
+     'weights_name': 'cascade_mask_rcnn_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-9aa8c394.pth',
+     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py',
+     'paper_results': {'box AP': 0.471, 'AP50': 0.661, 'AP75': 0.513}}
+)
+
+model_configs.append(
+    {'model_name': 'GCNet (ResNeXt-101 + DCN + cascade + GC r4)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.6/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.1.pth',
+     'weights_name': 'cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.1.pth',
+     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py',
+     'paper_results': {'box AP': 0.479, 'AP50': 0.669, 'AP75': 0.522}}
+)
 
 model_configs.append(
     {'model_name': 'GCNet (ResNeXt-101 + DCN + cascade + GC r16)', 
      'paper_arxiv_id': '1904.11492',
-     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
-     'weights_name': 'cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b4164f6b.pth',
-     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_r4_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.7/cascade_mask_rcnn_r16_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b86027a6.pth',
+     'weights_name': 'cascade_mask_rcnn_r16_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x_20190602-b86027a6.pth',
+     'config': './configs/gcnet/x101/cascade/dcn/cascade_mask_rcnn_r16_gcb_dconv_c3-c5_x101_32x4d_fpn_syncbn_1x.py',
      'paper_results': None}
 )
             
