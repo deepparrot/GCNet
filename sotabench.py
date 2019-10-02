@@ -450,7 +450,7 @@ model_configs.append(
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.5/cascade_mask_rcnn_x101_32x4d_fpn_syncbn_1x_20190602-63a800fb.pth',
      'weights_name': 'cascade_mask_rcnn_x101_32x4d_fpn_syncbn_1x_20190602-63a800fb.pth',
      'config': './configs/gcnet/x101/cascade/cascade_mask_rcnn_x101_32x4d_fpn_syncbn_1x.py',
-     'paper_results': {'box AP': 0.447 'AP50': 0.63, 'AP75': 0.485}}
+     'paper_results': {'box AP': 0.447, 'AP50': 0.63, 'AP75': 0.485}}
 )
 
 model_configs.append(
