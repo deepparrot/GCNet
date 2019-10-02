@@ -340,6 +340,8 @@ def evaluate_model(model_name, paper_arxiv_id, weights_url, weights_name, paper_
         evaluator.save()
 
 model_configs = []
+
+# Results on R50-FPN with backbone (fixBN)
 model_configs.append(
     {'model_name': 'Mask R-CNN (ResNet-50-FPN, 1x LR)', 
      'paper_arxiv_id': '1904.11492',
@@ -357,13 +359,62 @@ model_configs.append(
      'paper_results': None}
 )
 model_configs.append(
-    {'model_name': 'Mask R-CNN (ResNet-101-FPN, 1x LR)', 
+    {'model_name': 'Mask R-CNN (ResNet-50-FPN, GC r16, 2x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.3/mask_rcnn_r16_gcb_c3-c5_r50_fpn_2x-bf3a5059.pth',
+     'weights_name': 'mask_rcnn_r16_gcb_c3-c5_r50_fpn_2x-bf3a5059.pth',
+     'config': './configs/gcnet/r50/mask_rcnn_r16_gcb_c3-c5_r50_fpn_2x.py',
+     'paper_results': {'box AP': 0.394, 'AP50': 0.616, 'AP75': 0.424}}
+)
+model_configs.append(
+    {'model_name': 'Mask R-CNN (ResNet-50-FPN, GC r4, 2x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.3/mask_rcnn_r4_gcb_c3-c5_r50_fpn_2x-360c29f3.pth',
+     'weights_name': 'mask_rcnn_r4_gcb_c3-c5_r50_fpn_2x-360c29f3.pth',
+     'config': './configs/gcnet/r50/mask_rcnn_r4_gcb_c3-c5_r50_fpn_2x.py',
+     'paper_results': {'box AP': 0.399, 'AP50': 0.622, 'AP75': 0.429}}
+)
+
+# Results on R101-FPN with backbone (fixBN)
+
+model_configs.append(
+    {'model_name': 'Mask R-CNN (ResNet-101-FPN, fixBN, 1x LR)', 
      'paper_arxiv_id': '1904.11492',
      'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.2/mask_rcnn_r101_fpn_1x.pth',
      'weights_name': 'mask_rcnn_r101_fpn_1x.pth',
      'config': './configs/gcnet/r101/mask_rcnn_r101_fpn_1x.py',
      'paper_results': None}
 )
+
+model_configs.append(
+    {'model_name': 'Mask R-CNN (ResNet-101-FPN, syncBN, 1x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.4/mask_rcnn_r101_fpn_syncbn_1x_20190602-b2a0e2b7.pth',
+     'weights_name': 'mask_rcnn_r101_fpn_syncbn_1x_20190602-b2a0e2b7.pth',
+     'config': './configs/gcnet/r101/backbone_syncbn/mask_rcnn_r101_fpn_syncbn_1x.py',
+     'paper_results': {'box AP': 0.398, 'AP50': 0.613, 'AP75': 0.429}}
+)
+
+model_configs.append(
+    {'model_name': 'Mask R-CNN (ResNet-101-FPN, syncBN, GC r16, 1x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.4/mask_rcnn_r16_gcb_c3-c5_r101_fpn_syncbn_1x_20190602-717e6dbd.pth',
+     'weights_name': 'mask_rcnn_r16_gcb_c3-c5_r101_fpn_syncbn_1x_20190602-717e6dbd.pth',
+     'config': './configs/gcnet/r101/backbone_syncbn/mask_rcnn_r16_gcb_c3-c5_r101_fpn_syncbn_1x.py',
+     'paper_results': {'box AP': 0.411, 'AP50': 0.636, 'AP75': 0.45}}
+)
+
+model_configs.append(
+    {'model_name': 'Mask R-CNN (ResNet-101-FPN, syncBN, GC r4, 1x LR)', 
+     'paper_arxiv_id': '1904.11492',
+     'weights_url': 'https://github.com/deepparrot/GCNet/releases/download/0.4/mask_rcnn_r4_gcb_c3-c5_r101_fpn_syncbn_1x_20190602-a893c718.pth',
+     'weights_name': 'mask_rcnn_r4_gcb_c3-c5_r101_fpn_syncbn_1x_20190602-a893c718.pth',
+     'config': './configs/gcnet/r101/backbone_syncbn/mask_rcnn_r4_gcb_c3-c5_r101_fpn_syncbn_1x.py',
+     'paper_results': {'box AP': 0.417, 'AP50': 0.637, 'AP75': 0.455}}
+)	
+
+# rest
+
 model_configs.append(
     {'model_name': 'GCNet (ResNeXt-101 + DCN + cascade + GC r16)', 
      'paper_arxiv_id': '1904.11492',
